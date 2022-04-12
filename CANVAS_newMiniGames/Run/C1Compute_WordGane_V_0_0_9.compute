@@ -1,0 +1,1498 @@
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+#pragma kernel forLoadImageColor
+
+#pragma kernel forLoadImageColorWriteTextField
+
+
+#pragma kernel forLoadTextureBig
+
+#pragma kernel forPrintTextureBig
+
+
+#pragma kernel forLoadTextureTransparent
+
+#pragma kernel forPrintTextureTransparent
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+
+#pragma kernel forLoadTextureCharacterPosition
+
+
+
+#pragma kernel forPrintTilesAlphabetWriteTextField
+
+
+#pragma kernel forPrintTilesAlphabetIndividualWriteTextField
+
+#pragma kernel forPrintTilesNumberIndividualWriteTextField
+
+#pragma kernel forPrintTilesPortugueseIndividualWriteTextField
+
+
+
+#pragma kernel forPrintTilesAlphabet
+
+
+#pragma kernel forPrintTilesAlphabetIndividual
+
+#pragma kernel forPrintTilesNumberIndividual
+
+#pragma kernel forPrintTilesPortugueseIndividual
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+#pragma kernel forLoadTextureCharacterPosition_size14
+
+
+#pragma kernel forPrintTilesAlphabet_size14
+
+
+#pragma kernel forPrintTilesAlphabetIndividual_size14
+
+#pragma kernel forPrintTilesNumberIndividual_size14
+
+#pragma kernel forPrintTilesPortugueseIndividual_size14
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+#pragma kernel forLoadTextureCharacterPosition_size22
+
+
+#pragma kernel forPrintTilesAlphabetWriteTextField_size22
+
+
+#pragma kernel forPrintTilesAlphabetIndividualWriteTextField_size22
+
+#pragma kernel forPrintTilesNumberIndividualWriteTextField_size22
+
+#pragma kernel forPrintTilesPortugueseIndividualWriteTextField_size22
+
+
+
+#pragma kernel forPrintTilesAlphabet_size22
+
+
+#pragma kernel forPrintTilesAlphabetIndividual_size22
+
+#pragma kernel forPrintTilesNumberIndividual_size22
+
+#pragma kernel forPrintTilesPortugueseIndividual_size22
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+
+#pragma kernel forLoadPointerPosition
+
+#pragma kernel forPrintPointer
+
+#pragma kernel forPrintPointerBlack
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+
+#pragma kernel forLoadHorizontalPosition
+
+#pragma kernel forPrintHorizontal
+
+#pragma kernel forPrintHorizontalBlack
+
+
+
+#pragma kernel forLoadVerticalPosition
+
+#pragma kernel forPrintVertical
+
+#pragma kernel forPrintVerticalBlack
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+#include "UnityCG.cginc"
+
+
+
+int _WIDTH;
+int _WIDTHlargeMemory;
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+shared RWStructuredBuffer<float4> bufferImageColor;
+shared RWStructuredBuffer<float4> bufferLargeMemory;
+shared RWStructuredBuffer<float4> bufferImageColorWriteTextField;
+
+
+shared RWStructuredBuffer<float> bufferTextureTransparentPositionX;
+shared RWStructuredBuffer<float> bufferTextureTransparentPositionY;
+
+shared RWStructuredBuffer<float> bufferTextureBigPositionX;
+shared RWStructuredBuffer<float> bufferTextureBigPositionY;
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+shared RWStructuredBuffer<float> bufferTextureCharacterPositionX;
+shared RWStructuredBuffer<float> bufferTextureCharacterPositionY;
+
+shared RWStructuredBuffer<float> bufferTextureAlphabetColor;
+
+shared RWStructuredBuffer<float> bufferTextureNumberColor;
+
+shared RWStructuredBuffer<float> bufferTexturePortugueseColor;
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+
+shared RWStructuredBuffer<float> bufferTextureCharacterPositionX_size14;
+shared RWStructuredBuffer<float> bufferTextureCharacterPositionY_size14;
+
+shared RWStructuredBuffer<float> bufferTextureAlphabetColor_size14;
+
+shared RWStructuredBuffer<float> bufferTextureNumberColor_size14;
+
+shared RWStructuredBuffer<float> bufferTexturePortugueseColor_size14;
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+
+shared RWStructuredBuffer<float> bufferTextureCharacterPositionX_size22;
+shared RWStructuredBuffer<float> bufferTextureCharacterPositionY_size22;
+
+shared RWStructuredBuffer<float> bufferTextureAlphabetColor_size22;
+
+shared RWStructuredBuffer<float> bufferTextureNumberColor_size22;
+
+shared RWStructuredBuffer<float> bufferTexturePortugueseColor_size22;
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+
+shared RWStructuredBuffer<float> bufferPointerPositionX;
+shared RWStructuredBuffer<float> bufferPointerPositionY;
+
+shared RWStructuredBuffer<float> bufferPointerColor;
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+
+shared RWStructuredBuffer<float> bufferHorizontalPositionX;
+shared RWStructuredBuffer<float> bufferHorizontalPositionY;
+
+shared RWStructuredBuffer<float> bufferVerticalPositionX;
+shared RWStructuredBuffer<float> bufferVerticalPositionY;
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+[numthreads(1,1,1)]
+void forLoadImageColor(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+
+    uint positionOverArrayImage =  blockOfComputers.x + (blockOfComputers.y * 2000);
+    // uint positionOverArrayRunnning =  blockOfComputers.x + (blockOfComputers.y * 6000);
+    
+    uint positionOverArrayMemory =  blockOfComputers.x +  ((blockOfComputers.y + 1)*6000);
+    
+    //SIX MILLIONS - 4 THOUSAND
+    uint upperBlock = 5996000;
+    // uint upperBlock2 = 2995000;
+
+
+
+    bufferImageColor[positionOverArrayImage] = bufferLargeMemory[positionOverArrayMemory + upperBlock];
+    // bufferImageColor[positionOverArrayImage] = bufferLargeMemory[positionOverArrayRunnning];
+    // bufferImageColor[positionOverArrayImage] = bufferLargeMemory[positionOverArrayMemory + upperBlock2];
+
+
+    GroupMemoryBarrierWithGroupSync();
+
+}
+
+
+
+[numthreads(1, 1, 1)]
+void forLoadImageColorWriteTextField(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+
+    uint positionOverArrayImage =  blockOfComputers.x + (blockOfComputers.y * 2000);
+
+    // uint positionOverArrayRunnning =  blockOfComputers.x + (blockOfComputers.y * 6000);
+    
+    // uint positionOverArrayMemory =  blockOfComputers.x +  ((blockOfComputers.y + 1)*6000);
+
+    // uint positionOverArrayMemory =  blockOfComputers.x + (blockOfComputers.y * 2000);
+
+    //SIX MILLIONS - 4 THOUSAND
+    // uint upperBlock = 5996000;
+    // uint upperBlock2 = 2995000;
+
+    // bufferImageColor[positionOverArrayImage] = bufferMiniGameScreen[positionOverArrayImage];
+
+    // bufferImageColor[positionOverArrayImage] = bufferLargeMemory[positionOverArrayRunnning];
+    // bufferImageColor[positionOverArrayImage] = bufferLargeMemory[positionOverArrayMemory + upperBlock2];
+
+    GroupMemoryBarrierWithGroupSync();
+
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+[numthreads(1,1,1)]
+void forLoadTextureBig(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+    
+    uint positionOverArray = blockOfComputers.x  + blockOfComputers.y * 2000;
+
+    bufferTextureBigPositionX[positionOverArray] = blockOfComputers.x;
+    bufferTextureBigPositionY[positionOverArray] = blockOfComputers.y;
+    
+    GroupMemoryBarrierWithGroupSync();
+
+}
+
+
+
+int _PositionBigX;
+int _PositionBigY;
+
+[numthreads(1,1,1)]
+void forPrintTextureBig(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{    
+
+    uint positionOverArray = blockOfComputers.x + blockOfComputers.y * 2000;
+
+    float xAxis = _PositionBigX + bufferTextureBigPositionX[positionOverArray];
+    float yAxis = _PositionBigY + bufferTextureBigPositionY[positionOverArray];
+
+
+    float2 position = float2(xAxis, yAxis);
+
+    
+    float4 color = float4(1,1,1,1); 
+   
+    // float4 color = 0;    
+    
+    bufferLargeMemory[position.y * _WIDTHlargeMemory + position.x] = color;
+    
+    GroupMemoryBarrierWithGroupSync();
+
+}      
+
+
+
+[numthreads(1000,1,1)]
+void forLoadTextureTransparent(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+    
+    uint positionOverArray = blockOfComputers.x * 1000 + computer.x;
+
+    bufferTextureTransparentPositionX[positionOverArray] = computer.x;
+    bufferTextureTransparentPositionY[positionOverArray] = blockOfComputers.x;
+    
+    GroupMemoryBarrierWithGroupSync();
+
+}
+
+
+
+
+int _PositionTransparentX;
+int _PositionTransparentY;
+
+[numthreads(1000,1,1)]
+void forPrintTextureTransparent(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+ 
+    float xAxis =  _PositionTransparentX + bufferTextureTransparentPositionX [(blockOfComputers.x * 1000)  +  computer.x];
+    float yAxis =  bufferTextureTransparentPositionY [(blockOfComputers.x * 1000)  +  computer.x];
+
+
+
+    float2 position = float2(xAxis, yAxis);
+
+    
+    float4 color = float4(1,1,1,1); 
+   
+    // float4 color = 0;    
+    
+    bufferImageColor[position.y * _WIDTH + position.x] = color;
+    
+    GroupMemoryBarrierWithGroupSync();
+
+}      
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+[numthreads(112,1,1)]
+void forLoadTextureCharacterPosition(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+    
+    uint positionOverArray = blockOfComputers.x * 112 + computer.x;
+
+    bufferTextureCharacterPositionX[positionOverArray] = computer.x;
+    bufferTextureCharacterPositionY[positionOverArray] = blockOfComputers.x;
+    
+    GroupMemoryBarrierWithGroupSync();
+
+}
+
+
+
+
+[numthreads(112,1,1)]
+void forPrintTilesAlphabetWriteTextField(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+
+    float xAxis = bufferTextureCharacterPositionX [(blockOfComputers.x * 112)  +  computer.x];
+    float yAxis = bufferTextureCharacterPositionY [(blockOfComputers.x * 112)  +  computer.x];
+
+
+
+    float2 position = float2(xAxis, yAxis);
+
+    uint colorArray = ( (blockOfComputers.x * 112) +   computer.x) * 4 ;
+
+    float r = bufferTextureAlphabetColor[colorArray ];
+    float g = bufferTextureAlphabetColor[colorArray + 1 ];
+    float b = bufferTextureAlphabetColor[colorArray + 2 ];
+    float a = bufferTextureAlphabetColor[colorArray + 3 ];
+
+    float4 color = float4(r,g,b,a); 
+   
+    // float4 color = 1;    
+    
+    bufferImageColorWriteTextField[position.y * _WIDTH + position.x] = color;
+    
+    GroupMemoryBarrierWithGroupSync();
+
+}      
+
+
+
+
+int _PositionTileXWriteTextField;
+int _PositionTileYWriteTextField;
+
+int _PositionScreenXWriteTextField;
+int _PositionScreenYWriteTextField;
+
+
+[numthreads(28,1,1)]
+void forPrintTilesAlphabetIndividualWriteTextField(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+
+    float xAxis = _PositionScreenXWriteTextField + (-28 * _PositionTileXWriteTextField) + bufferTextureCharacterPositionX [(blockOfComputers.x * 112) + (112 * 56 * _PositionTileYWriteTextField) + (28 * _PositionTileXWriteTextField) + computer.x];
+    float yAxis = _PositionScreenYWriteTextField + (-56 * _PositionTileYWriteTextField) + bufferTextureCharacterPositionY [(blockOfComputers.x * 112) + (112 * 56 * _PositionTileYWriteTextField) + (28 * _PositionTileXWriteTextField) + computer.x];
+
+
+    float2 position = float2(xAxis, yAxis);
+
+    // uint colorArray = ( (blockOfComputers.x * 112) +   computer.x) * 4 ;
+    uint colorArray = ((blockOfComputers.x * 112) +  (112 * 56 * _PositionTileYWriteTextField)  +  (28  *  _PositionTileXWriteTextField)  +  computer.x) * 4 ;
+
+    float r = bufferTextureAlphabetColor[colorArray ];
+    float g = bufferTextureAlphabetColor[colorArray + 1 ];
+    float b = bufferTextureAlphabetColor[colorArray + 2 ];
+    float a = bufferTextureAlphabetColor[colorArray + 3 ];
+
+    float4 color = float4(r,g,b,a); 
+   
+    // float4 color = 1;    
+    
+    // bufferLargeMemory[position.y * _WIDTHlargeMemory + position.x] = color;
+    bufferImageColorWriteTextField[position.y * _WIDTH + position.x] = color;
+
+    
+    GroupMemoryBarrierWithGroupSync();
+
+}      
+
+
+
+
+int _PositionTileNumberXWriteTextField;
+int _PositionTileNumberYWriteTextField;
+
+int _PositionScreenNumberXWriteTextField;
+int _PositionScreenNumberYWriteTextField;
+
+[numthreads(28,1,1)]
+void forPrintTilesNumberIndividualWriteTextField(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+
+ 
+    float xAxis = _PositionScreenNumberXWriteTextField + (-28 * _PositionTileNumberXWriteTextField) + bufferTextureCharacterPositionX [(blockOfComputers.x * 112) + (112 * 56 * _PositionTileNumberYWriteTextField) + (28 * _PositionTileNumberXWriteTextField) + computer.x];
+    float yAxis = _PositionScreenNumberYWriteTextField + (-56 * _PositionTileNumberYWriteTextField) + bufferTextureCharacterPositionY [(blockOfComputers.x * 112) + (112 * 56 * _PositionTileNumberYWriteTextField) + (28 * _PositionTileNumberXWriteTextField) + computer.x];
+
+
+
+    float2 position = float2(xAxis, yAxis);
+
+    // uint colorArray = ( (blockOfComputers.x * 112) +   computer.x) * 4 ;
+    uint colorArray = ((blockOfComputers.x * 112) +  (112 * 56 * _PositionTileNumberYWriteTextField)  +  (28  *  _PositionTileNumberXWriteTextField)  +  computer.x) * 4 ;
+
+    float r = bufferTextureNumberColor[colorArray ];
+    float g = bufferTextureNumberColor[colorArray + 1 ];
+    float b = bufferTextureNumberColor[colorArray + 2 ];
+    float a = bufferTextureNumberColor[colorArray + 3 ];
+
+    float4 color = float4(r,g,b,a); 
+   
+    // float4 color = 1;    
+    
+    bufferImageColorWriteTextField[position.y * _WIDTH + position.x] = color;
+    // bufferLargeMemory[position.y * _WIDTHlargeMemory + position.x] = color;
+    
+    GroupMemoryBarrierWithGroupSync();
+
+}      
+
+
+
+
+int _PositionTilePortugueseXWriteTextField;
+int _PositionTilePortugueseYWriteTextField;
+
+int _PositionScreenPortugueseXWriteTextField;
+int _PositionScreenPortugueseYWriteTextField;
+
+[numthreads(31,1,1)]
+void forPrintTilesPortugueseIndividualWriteTextField(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+ 
+    float xAxis = _PositionScreenPortugueseXWriteTextField + (-31 * _PositionTilePortugueseXWriteTextField) + bufferTextureCharacterPositionX [(blockOfComputers.x * 124) + (124 * 44 * _PositionTilePortugueseYWriteTextField) + (31 * _PositionTilePortugueseXWriteTextField) + computer.x];
+    float yAxis = _PositionScreenPortugueseYWriteTextField + (-44 * _PositionTilePortugueseYWriteTextField) + bufferTextureCharacterPositionY [(blockOfComputers.x * 124) + (124 * 44 * _PositionTilePortugueseYWriteTextField) + (31 * _PositionTilePortugueseXWriteTextField) + computer.x];
+
+
+
+    float2 position = float2(xAxis, yAxis);
+
+    // uint colorArray = ( (blockOfComputers.x * 124) +   computer.x) * 4 ;
+    uint colorArray = ((blockOfComputers.x * 124) +  (124 * 44 * _PositionTilePortugueseYWriteTextField)  +  (31  *  _PositionTilePortugueseXWriteTextField)  +  computer.x) * 4 ;
+
+    float r = bufferTexturePortugueseColor[colorArray];
+    float g = bufferTexturePortugueseColor[colorArray + 1];
+    float b = bufferTexturePortugueseColor[colorArray + 2];
+    float a = bufferTexturePortugueseColor[colorArray + 3];
+
+    float4 color = float4(r,g,b,a); 
+   
+    // float4 color = 1;    
+
+    bufferImageColorWriteTextField[position.y * _WIDTH + position.x] = color;    
+    // bufferLargeMemory[position.y * _WIDTHlargeMemory + position.x] = color;
+    
+    GroupMemoryBarrierWithGroupSync();
+
+}      
+
+
+
+
+
+
+[numthreads(112,1,1)]
+void forPrintTilesAlphabet(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+
+ 
+    float xAxis = 2000 + bufferTextureCharacterPositionX [(blockOfComputers.x * 112)  +  computer.x];
+    float yAxis = 1100 + bufferTextureCharacterPositionY [(blockOfComputers.x * 112)  +  computer.x];
+
+
+
+    float2 position = float2(xAxis, yAxis);
+
+    uint colorArray = ( (blockOfComputers.x * 112) +   computer.x) * 4 ;
+
+    float r = bufferTextureAlphabetColor[colorArray ];
+    float g = bufferTextureAlphabetColor[colorArray + 1 ];
+    float b = bufferTextureAlphabetColor[colorArray + 2 ];
+    float a = bufferTextureAlphabetColor[colorArray + 3 ];
+
+    float4 color = float4(r,g,b,a); 
+   
+    // float4 color = 1;    
+    
+    bufferLargeMemory[position.y * _WIDTHlargeMemory + position.x] = color;
+    
+    GroupMemoryBarrierWithGroupSync();
+
+}      
+
+
+
+
+int _PositionTileX;
+int _PositionTileY;
+
+int _PositionScreenX;
+int _PositionScreenY;
+
+
+[numthreads(28,1,1)]
+void forPrintTilesAlphabetIndividual(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+
+
+    float xAxis = 2000 + _PositionScreenX + (-28 * _PositionTileX) + bufferTextureCharacterPositionX [(blockOfComputers.x * 112) + (112 * 56 * _PositionTileY) + (28 * _PositionTileX) + computer.x];
+    float yAxis = 1000 + _PositionScreenY + (-56 * _PositionTileY) + bufferTextureCharacterPositionY [(blockOfComputers.x * 112) + (112 * 56 * _PositionTileY) + (28 * _PositionTileX) + computer.x];
+
+
+    float2 position = float2(xAxis, yAxis);
+
+    uint colorArray = ((blockOfComputers.x * 112) +  (112 * 56 * _PositionTileY)  +  (28  *  _PositionTileX)  +  computer.x) * 4 ;
+
+    float r = bufferTextureAlphabetColor[colorArray ];
+    float g = bufferTextureAlphabetColor[colorArray + 1 ];
+    float b = bufferTextureAlphabetColor[colorArray + 2 ];
+    float a = bufferTextureAlphabetColor[colorArray + 3 ];
+
+    float4 color = float4(r,g,b,a); 
+   
+    // float4 color = 1;    
+    
+    bufferLargeMemory[position.y * _WIDTHlargeMemory + position.x] = color;
+
+    
+    GroupMemoryBarrierWithGroupSync();
+
+}      
+
+
+
+
+int _PositionTileNumberX;
+int _PositionTileNumberY;
+
+int _PositionScreenNumberX;
+int _PositionScreenNumberY;
+
+
+[numthreads(28,1,1)]
+void forPrintTilesNumberIndividual(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+
+ 
+    float xAxis = 2000 + _PositionScreenNumberX + (-28 * _PositionTileNumberX) + bufferTextureCharacterPositionX [(blockOfComputers.x * 112) + (112 * 56 * _PositionTileNumberY) + (28 * _PositionTileNumberX) + computer.x];
+    float yAxis = 1000 + _PositionScreenNumberY + (-56 * _PositionTileNumberY) + bufferTextureCharacterPositionY [(blockOfComputers.x * 112) + (112 * 56 * _PositionTileNumberY) + (28 * _PositionTileNumberX) + computer.x];
+
+
+
+    float2 position = float2(xAxis, yAxis);
+
+    // uint colorArray = ( (blockOfComputers.x * 112) +   computer.x) * 4 ;
+    uint colorArray = ((blockOfComputers.x * 112) +  (112 * 56 * _PositionTileNumberY)  +  (28  *  _PositionTileNumberX)  +  computer.x) * 4 ;
+
+    float r = bufferTextureNumberColor[colorArray ];
+    float g = bufferTextureNumberColor[colorArray + 1 ];
+    float b = bufferTextureNumberColor[colorArray + 2 ];
+    float a = bufferTextureNumberColor[colorArray + 3 ];
+
+    float4 color = float4(r,g,b,a); 
+   
+    // float4 color = 1;    
+    
+    bufferLargeMemory[position.y * _WIDTHlargeMemory + position.x] = color;
+    
+    GroupMemoryBarrierWithGroupSync();
+
+}      
+
+
+
+
+int _PositionTilePortugueseX;
+int _PositionTilePortugueseY;
+
+int _PositionScreenPortugueseX;
+int _PositionScreenPortugueseY;
+
+[numthreads(31,1,1)]
+void forPrintTilesPortugueseIndividual(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+
+
+ 
+    float xAxis = 2000 + _PositionScreenPortugueseX + (-31 * _PositionTilePortugueseX) + bufferTextureCharacterPositionX [(blockOfComputers.x * 124) + (124 * 44 * _PositionTilePortugueseY) + (31 * _PositionTilePortugueseX) + computer.x];
+    float yAxis = 1000 + _PositionScreenPortugueseY + (-44 * _PositionTilePortugueseY) + bufferTextureCharacterPositionY [(blockOfComputers.x * 124) + (124 * 44 * _PositionTilePortugueseY) + (31 * _PositionTilePortugueseX) + computer.x];
+
+
+
+    float2 position = float2(xAxis, yAxis);
+
+    // uint colorArray = ( (blockOfComputers.x * 124) +   computer.x) * 4 ;
+    uint colorArray = ((blockOfComputers.x * 124) +  (124 * 44 * _PositionTilePortugueseY)  +  (31  *  _PositionTilePortugueseX)  +  computer.x) * 4 ;
+
+    float r = bufferTexturePortugueseColor[colorArray];
+    float g = bufferTexturePortugueseColor[colorArray + 1];
+    float b = bufferTexturePortugueseColor[colorArray + 2];
+    float a = bufferTexturePortugueseColor[colorArray + 3];
+
+    float4 color = float4(r,g,b,a); 
+   
+    // float4 color = 1;    
+    
+    bufferLargeMemory[position.y * _WIDTHlargeMemory + position.x] = color;
+    
+    GroupMemoryBarrierWithGroupSync();
+
+}      
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+[numthreads(44,1,1)]
+void forLoadTextureCharacterPosition_size14(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+    
+    uint positionOverArray = blockOfComputers.x * 44 + computer.x;
+
+    bufferTextureCharacterPositionX_size14[positionOverArray] = computer.x;
+    bufferTextureCharacterPositionY_size14[positionOverArray] = blockOfComputers.x;
+    
+    GroupMemoryBarrierWithGroupSync();
+
+}
+
+
+
+
+[numthreads(44,1,1)]
+void forPrintTilesAlphabet_size14(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+
+
+ 
+    float xAxis = 2000 + bufferTextureCharacterPositionX_size14 [(blockOfComputers.x * 44)  +  computer.x];
+    float yAxis = 1000 + bufferTextureCharacterPositionY_size14 [(blockOfComputers.x * 44)  +  computer.x];
+
+
+
+    float2 position = float2(xAxis, yAxis);
+
+    uint colorArray = ( (blockOfComputers.x * 44) +   computer.x) * 4 ;
+
+    float r = bufferTextureAlphabetColor_size14[colorArray ];
+    float g = bufferTextureAlphabetColor_size14[colorArray + 1 ];
+    float b = bufferTextureAlphabetColor_size14[colorArray + 2 ];
+    float a = bufferTextureAlphabetColor_size14[colorArray + 3 ];
+
+    float4 color = float4(r,g,b,a); 
+   
+    // float4 color = 1;    
+    
+    bufferLargeMemory[position.y * _WIDTHlargeMemory + position.x] = color;
+
+    GroupMemoryBarrierWithGroupSync();
+
+}      
+
+
+
+
+int _PositionTileX_size14;
+int _PositionTileY_size14;
+
+int _PositionScreenX_size14;
+int _PositionScreenY_size14;
+
+
+[numthreads(11,1,1)]
+void forPrintTilesAlphabetIndividual_size14(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+
+ 
+
+    float xAxis = 2000 + _PositionScreenX_size14 + (-11 * _PositionTileX_size14) + bufferTextureCharacterPositionX_size14 [(blockOfComputers.x * 44) + (44 * 21 * _PositionTileY_size14) + (11 * _PositionTileX_size14) + computer.x];
+    float yAxis = 1000 + _PositionScreenY_size14 + (-21 * _PositionTileY_size14) + bufferTextureCharacterPositionY_size14 [(blockOfComputers.x * 44) + (44 * 21 * _PositionTileY_size14) + (11 * _PositionTileX_size14) + computer.x];
+
+
+    float2 position = float2(xAxis, yAxis);
+
+    // uint colorArray = ( (blockOfComputers.x * 124) +   computer.x) * 4 ;
+    uint colorArray = ((blockOfComputers.x * 44) +  (44 * 21 * _PositionTileY_size14)  +  (11  *  _PositionTileX_size14)  +  computer.x) * 4 ;
+
+    float r = bufferTextureAlphabetColor_size14[colorArray ];
+    float g = bufferTextureAlphabetColor_size14[colorArray + 1 ];
+    float b = bufferTextureAlphabetColor_size14[colorArray + 2 ];
+    float a = bufferTextureAlphabetColor_size14[colorArray + 3 ];
+
+    float4 color = float4(r,g,b,a); 
+   
+    // float4 color = 1;    
+    
+    bufferLargeMemory[position.y * _WIDTHlargeMemory + position.x] = color;
+
+    
+    GroupMemoryBarrierWithGroupSync();
+
+}      
+
+
+
+
+int _PositionTileNumberX_size14;
+int _PositionTileNumberY_size14;
+
+int _PositionScreenNumberX_size14;
+int _PositionScreenNumberY_size14;
+
+
+[numthreads(11,1,1)]
+void forPrintTilesNumberIndividual_size14(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+ 
+    float xAxis = 2000 + _PositionScreenNumberX_size14 + (-11 * _PositionTileNumberX_size14) + bufferTextureCharacterPositionX_size14 [(blockOfComputers.x * 44) + (44 * 21 * _PositionTileNumberY_size14) + (11 * _PositionTileNumberX_size14) + computer.x];
+    float yAxis = 1000 + _PositionScreenNumberY_size14 + (-21 * _PositionTileNumberY_size14) + bufferTextureCharacterPositionY_size14 [(blockOfComputers.x * 44) + (44 * 21 * _PositionTileNumberY_size14) + (11 * _PositionTileNumberX_size14) + computer.x];
+
+
+
+    float2 position = float2(xAxis, yAxis);
+
+    // uint colorArray = ( (blockOfComputers.x * 44) +   computer.x) * 4 ;
+    uint colorArray = ((blockOfComputers.x * 44) +  (44 * 21 * _PositionTileNumberY_size14)  +  (11  *  _PositionTileNumberX_size14)  +  computer.x) * 4 ;
+
+    float r = bufferTextureNumberColor_size14[colorArray ];
+    float g = bufferTextureNumberColor_size14[colorArray + 1 ];
+    float b = bufferTextureNumberColor_size14[colorArray + 2 ];
+    float a = bufferTextureNumberColor_size14[colorArray + 3 ];
+
+    float4 color = float4(r,g,b,a); 
+   
+    // float4 color = 1;    
+    
+    bufferLargeMemory[position.y * _WIDTHlargeMemory + position.x] = color;
+    
+    GroupMemoryBarrierWithGroupSync();
+
+}      
+
+
+
+
+int _PositionTilePortugueseX_size14;
+int _PositionTilePortugueseY_size14;
+
+int _PositionScreenPortugueseX_size14;
+int _PositionScreenPortugueseY_size14;
+
+
+[numthreads(11,1,1)]
+void forPrintTilesPortugueseIndividual_size14(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+
+
+ 
+    float xAxis = 2000 + _PositionScreenPortugueseX_size14 + (-11 * _PositionTilePortugueseX_size14) + bufferTextureCharacterPositionX_size14 [(blockOfComputers.x * 44) + (44 * 21 * _PositionTilePortugueseY_size14) + (11 * _PositionTilePortugueseX_size14) + computer.x];
+    float yAxis = 1000 + _PositionScreenPortugueseY_size14 + (-21 * _PositionTilePortugueseY_size14) + bufferTextureCharacterPositionY_size14 [(blockOfComputers.x * 44) + (44 * 21 * _PositionTilePortugueseY_size14) + (11 * _PositionTilePortugueseX_size14) + computer.x];
+
+
+
+    float2 position = float2(xAxis, yAxis);
+
+    // uint colorArray = ( (blockOfComputers.x * 44) +   computer.x) * 4 ;
+    uint colorArray = ((blockOfComputers.x * 44) +  (44 * 21 * _PositionTilePortugueseY_size14)  +  (11  *  _PositionTilePortugueseX_size14)  +  computer.x) * 4 ;
+
+    float r = bufferTexturePortugueseColor_size14[colorArray];
+    float g = bufferTexturePortugueseColor_size14[colorArray + 1];
+    float b = bufferTexturePortugueseColor_size14[colorArray + 2];
+    float a = bufferTexturePortugueseColor_size14[colorArray + 3];
+
+    float4 color = float4(r,g,b,a); 
+   
+    // float4 color = 1;    
+    
+    bufferLargeMemory[position.y * _WIDTHlargeMemory + position.x] = color;
+    
+    GroupMemoryBarrierWithGroupSync();
+
+}      
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+[numthreads(68,1,1)]
+void forLoadTextureCharacterPosition_size22(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+    
+    uint positionOverArray = blockOfComputers.x * 68 + computer.x;
+
+    bufferTextureCharacterPositionX_size22[positionOverArray] = computer.x;
+    bufferTextureCharacterPositionY_size22[positionOverArray] = blockOfComputers.x;
+    
+    GroupMemoryBarrierWithGroupSync();
+
+}
+
+
+
+[numthreads(68,1,1)]
+void forPrintTilesAlphabetWriteTextField_size22(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+
+ 
+    float xAxis = 2000 + bufferTextureCharacterPositionX_size22 [(blockOfComputers.x * 68)  +  computer.x];
+    float yAxis = 1000 + bufferTextureCharacterPositionY_size22 [(blockOfComputers.x * 68)  +  computer.x];
+
+
+
+    float2 position = float2(xAxis, yAxis);
+
+    uint colorArray = ( (blockOfComputers.x * 68) +   computer.x) * 4 ;
+
+    float r = bufferTextureAlphabetColor_size22[colorArray ];
+    float g = bufferTextureAlphabetColor_size22[colorArray + 1 ];
+    float b = bufferTextureAlphabetColor_size22[colorArray + 2 ];
+    float a = bufferTextureAlphabetColor_size22[colorArray + 3 ];
+
+    float4 color = float4(r,g,b,a); 
+   
+    // float4 color = 1;    
+    
+    bufferImageColorWriteTextField[position.y * _WIDTH + position.x] = color;
+    
+    GroupMemoryBarrierWithGroupSync();
+
+}      
+
+
+
+
+int _PositionTileXWriteTextField_size22;
+int _PositionTileYWriteTextField_size22;
+
+int _PositionScreenXWriteTextField_size22;
+int _PositionScreenYWriteTextField_size22;
+
+[numthreads(17,1,1)]
+void forPrintTilesAlphabetIndividualWriteTextField_size22(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+
+    float xAxis = _PositionScreenXWriteTextField_size22 + (-17 * _PositionTileXWriteTextField_size22) + bufferTextureCharacterPositionX_size22 [(blockOfComputers.x * 68) + (68 * 34 * _PositionTileYWriteTextField_size22) + (17 * _PositionTileXWriteTextField_size22) + computer.x];
+    float yAxis = _PositionScreenYWriteTextField_size22 + (-34 * _PositionTileYWriteTextField_size22) + bufferTextureCharacterPositionY_size22 [(blockOfComputers.x * 68) + (68 * 34 * _PositionTileYWriteTextField_size22) + (17 * _PositionTileXWriteTextField_size22) + computer.x];
+
+
+    float2 position = float2(xAxis, yAxis);
+
+    // uint colorArray = ( (blockOfComputers.x * 124) +   computer.x) * 4 ;
+    uint colorArray = ((blockOfComputers.x * 68) +  (68 * 34 * _PositionTileYWriteTextField_size22)  +  (17  *  _PositionTileXWriteTextField_size22)  +  computer.x) * 4 ;
+
+    float r = bufferTextureAlphabetColor_size22[colorArray ];
+    float g = bufferTextureAlphabetColor_size22[colorArray + 1 ];
+    float b = bufferTextureAlphabetColor_size22[colorArray + 2 ];
+    float a = bufferTextureAlphabetColor_size22[colorArray + 3 ];
+
+    float4 color = float4(r,g,b,a); 
+   
+    // float4 color = 1;    
+    
+    bufferImageColorWriteTextField[position.y * _WIDTH + position.x] = color;
+
+    
+    GroupMemoryBarrierWithGroupSync();
+
+}      
+
+
+
+
+int _PositionTileNumberXWriteTextField_size22;
+int _PositionTileNumberYWriteTextField_size22;
+
+int _PositionScreenNumberXWriteTextField_size22;
+int _PositionScreenNumberYWriteTextField_size22;
+
+
+[numthreads(17,1,1)]
+void forPrintTilesNumberIndividualWriteTextField_size22(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+
+    float xAxis = _PositionScreenNumberXWriteTextField_size22 + (-17 * _PositionTileNumberXWriteTextField_size22) + bufferTextureCharacterPositionX_size22 [(blockOfComputers.x * 68) + (68 * 34 * _PositionTileNumberYWriteTextField_size22) + (17 * _PositionTileNumberXWriteTextField_size22) + computer.x];
+    float yAxis = _PositionScreenNumberYWriteTextField_size22 + (-34 * _PositionTileNumberYWriteTextField_size22) + bufferTextureCharacterPositionY_size22 [(blockOfComputers.x * 68) + (68 * 34 * _PositionTileNumberYWriteTextField_size22) + (17 * _PositionTileNumberXWriteTextField_size22) + computer.x];
+
+
+
+    float2 position = float2(xAxis, yAxis);
+
+    // uint colorArray = ( (blockOfComputers.x * 44) +   computer.x) * 4 ;
+    uint colorArray = ((blockOfComputers.x * 68) +  (68 * 34 * _PositionTileNumberYWriteTextField_size22)  +  (17  *  _PositionTileNumberXWriteTextField_size22)  +  computer.x) * 4 ;
+
+    float r = bufferTextureNumberColor_size22[colorArray ];
+    float g = bufferTextureNumberColor_size22[colorArray + 1 ];
+    float b = bufferTextureNumberColor_size22[colorArray + 2 ];
+    float a = bufferTextureNumberColor_size22[colorArray + 3 ];
+
+    float4 color = float4(r,g,b,a); 
+   
+    // float4 color = 1;    
+    
+    bufferImageColorWriteTextField[position.y * _WIDTH + position.x] = color;
+    
+    GroupMemoryBarrierWithGroupSync();
+
+}      
+
+
+
+
+int _PositionTilePortugueseXWriteTextField_size22;
+int _PositionTilePortugueseYWriteTextField_size22;
+
+int _PositionScreenPortugueseXWriteTextField_size22;
+int _PositionScreenPortugueseYWriteTextField_size22;
+
+[numthreads(17,1,1)]
+void forPrintTilesPortugueseIndividualWriteTextField_size22(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+
+    float xAxis = _PositionScreenPortugueseXWriteTextField_size22 + (-17 * _PositionTilePortugueseXWriteTextField_size22) + bufferTextureCharacterPositionX_size22 [(blockOfComputers.x * 68) + (68 * 34 * _PositionTilePortugueseYWriteTextField_size22) + (17 * _PositionTilePortugueseXWriteTextField_size22) + computer.x];
+    float yAxis = _PositionScreenPortugueseYWriteTextField_size22 + (-34 * _PositionTilePortugueseYWriteTextField_size22) + bufferTextureCharacterPositionY_size22 [(blockOfComputers.x * 68) + (68 * 34 * _PositionTilePortugueseYWriteTextField_size22) + (17 * _PositionTilePortugueseXWriteTextField_size22) + computer.x];
+
+
+
+    float2 position = float2(xAxis, yAxis);
+
+    // uint colorArray = ( (blockOfComputers.x * 44) +   computer.x) * 4 ;
+    uint colorArray = ((blockOfComputers.x * 68) +  (68 * 34 * _PositionTilePortugueseYWriteTextField_size22)  +  (17  *  _PositionTilePortugueseXWriteTextField_size22)  +  computer.x) * 4 ;
+
+    float r = bufferTexturePortugueseColor_size22[colorArray];
+    float g = bufferTexturePortugueseColor_size22[colorArray + 1];
+    float b = bufferTexturePortugueseColor_size22[colorArray + 2];
+    float a = bufferTexturePortugueseColor_size22[colorArray + 3];
+
+    float4 color = float4(r,g,b,a); 
+   
+    // float4 color = 1;    
+    
+    bufferImageColorWriteTextField[position.y * _WIDTH + position.x] = color;
+    
+    GroupMemoryBarrierWithGroupSync();
+
+}      
+
+
+
+
+
+
+[numthreads(68,1,1)]
+void forPrintTilesAlphabet_size22(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+
+ 
+    float xAxis = 2000 + bufferTextureCharacterPositionX_size22 [(blockOfComputers.x * 68)  +  computer.x];
+    float yAxis = 1000 + bufferTextureCharacterPositionY_size22 [(blockOfComputers.x * 68)  +  computer.x];
+
+
+
+    float2 position = float2(xAxis, yAxis);
+
+    uint colorArray = ( (blockOfComputers.x * 68) +   computer.x) * 4 ;
+
+    float r = bufferTextureAlphabetColor_size22[colorArray ];
+    float g = bufferTextureAlphabetColor_size22[colorArray + 1 ];
+    float b = bufferTextureAlphabetColor_size22[colorArray + 2 ];
+    float a = bufferTextureAlphabetColor_size22[colorArray + 3 ];
+
+    float4 color = float4(r,g,b,a); 
+   
+    // float4 color = 1;    
+    
+    bufferLargeMemory[position.y * _WIDTHlargeMemory + position.x] = color;
+    
+    GroupMemoryBarrierWithGroupSync();
+
+}      
+
+
+
+
+int _PositionTileX_size22;
+int _PositionTileY_size22;
+
+int _PositionScreenX_size22;
+int _PositionScreenY_size22;
+
+[numthreads(17,1,1)]
+void forPrintTilesAlphabetIndividual_size22(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+
+    float xAxis = 2000 + _PositionScreenX_size22 + (-17 * _PositionTileX_size22) + bufferTextureCharacterPositionX_size22 [(blockOfComputers.x * 68) + (68 * 34 * _PositionTileY_size22) + (17 * _PositionTileX_size22) + computer.x];
+    float yAxis = 1000 + _PositionScreenY_size22 + (-34 * _PositionTileY_size22) + bufferTextureCharacterPositionY_size22 [(blockOfComputers.x * 68) + (68 * 34 * _PositionTileY_size22) + (17 * _PositionTileX_size22) + computer.x];
+
+
+    float2 position = float2(xAxis, yAxis);
+
+    // uint colorArray = ( (blockOfComputers.x * 124) +   computer.x) * 4 ;
+    uint colorArray = ((blockOfComputers.x * 68) +  (68 * 34 * _PositionTileY_size22)  +  (17  *  _PositionTileX_size22)  +  computer.x) * 4 ;
+
+    float r = bufferTextureAlphabetColor_size22[colorArray ];
+    float g = bufferTextureAlphabetColor_size22[colorArray + 1 ];
+    float b = bufferTextureAlphabetColor_size22[colorArray + 2 ];
+    float a = bufferTextureAlphabetColor_size22[colorArray + 3 ];
+
+    float4 color = float4(r,g,b,a); 
+   
+    // float4 color = 1;    
+    
+    bufferLargeMemory[position.y * _WIDTHlargeMemory + position.x] = color;
+
+    
+    GroupMemoryBarrierWithGroupSync();
+
+}      
+
+
+
+
+int _PositionTileNumberX_size22;
+int _PositionTileNumberY_size22;
+
+int _PositionScreenNumberX_size22;
+int _PositionScreenNumberY_size22;
+
+
+[numthreads(17,1,1)]
+void forPrintTilesNumberIndividual_size22(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+
+ 
+    float xAxis = 2000 + _PositionScreenNumberX_size22 + (-17 * _PositionTileNumberX_size22) + bufferTextureCharacterPositionX_size22 [(blockOfComputers.x * 68) + (68 * 34 * _PositionTileNumberY_size22) + (17 * _PositionTileNumberX_size22) + computer.x];
+    float yAxis = 1000 + _PositionScreenNumberY_size22 + (-34 * _PositionTileNumberY_size22) + bufferTextureCharacterPositionY_size22 [(blockOfComputers.x * 68) + (68 * 34 * _PositionTileNumberY_size22) + (17 * _PositionTileNumberX_size22) + computer.x];
+
+
+
+    float2 position = float2(xAxis, yAxis);
+
+    // uint colorArray = ( (blockOfComputers.x * 44) +   computer.x) * 4 ;
+    uint colorArray = ((blockOfComputers.x * 68) +  (68 * 34 * _PositionTileNumberY_size22)  +  (17  *  _PositionTileNumberX_size22)  +  computer.x) * 4 ;
+
+    float r = bufferTextureNumberColor_size22[colorArray ];
+    float g = bufferTextureNumberColor_size22[colorArray + 1 ];
+    float b = bufferTextureNumberColor_size22[colorArray + 2 ];
+    float a = bufferTextureNumberColor_size22[colorArray + 3 ];
+
+    float4 color = float4(r,g,b,a); 
+   
+    // float4 color = 1;    
+    
+    bufferLargeMemory[position.y * _WIDTHlargeMemory + position.x] = color;
+    
+    GroupMemoryBarrierWithGroupSync();
+
+}      
+
+
+
+
+int _PositionTilePortugueseX_size22;
+int _PositionTilePortugueseY_size22;
+
+int _PositionScreenPortugueseX_size22;
+int _PositionScreenPortugueseY_size22;
+
+
+[numthreads(17,1,1)]
+void forPrintTilesPortugueseIndividual_size22(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+
+ 
+    float xAxis = 2000 + _PositionScreenPortugueseX_size22 + (-17 * _PositionTilePortugueseX_size22) + bufferTextureCharacterPositionX_size22 [(blockOfComputers.x * 68) + (68 * 34 * _PositionTilePortugueseY_size22) + (17 * _PositionTilePortugueseX_size22) + computer.x];
+    float yAxis = 1000 + _PositionScreenPortugueseY_size22 + (-34 * _PositionTilePortugueseY_size22) + bufferTextureCharacterPositionY_size22 [(blockOfComputers.x * 68) + (68 * 34 * _PositionTilePortugueseY_size22) + (17 * _PositionTilePortugueseX_size22) + computer.x];
+
+
+
+    float2 position = float2(xAxis, yAxis);
+
+    // uint colorArray = ( (blockOfComputers.x * 44) +   computer.x) * 4 ;
+    uint colorArray = ((blockOfComputers.x * 68) +  (68 * 34 * _PositionTilePortugueseY_size22)  +  (17  *  _PositionTilePortugueseX_size22)  +  computer.x) * 4 ;
+
+    float r = bufferTexturePortugueseColor_size22[colorArray];
+    float g = bufferTexturePortugueseColor_size22[colorArray + 1];
+    float b = bufferTexturePortugueseColor_size22[colorArray + 2];
+    float a = bufferTexturePortugueseColor_size22[colorArray + 3];
+
+    float4 color = float4(r,g,b,a); 
+   
+    // float4 color = 1;    
+    
+    bufferLargeMemory[position.y * _WIDTHlargeMemory + position.x] = color;
+    
+    GroupMemoryBarrierWithGroupSync();
+
+}      
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+[numthreads(10,1,1)]
+void forLoadPointerPosition(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+    
+    uint positionOverArray = blockOfComputers.x * 10 + computer.x;
+
+    bufferPointerPositionX[positionOverArray] = computer.x;
+    bufferPointerPositionY[positionOverArray] = blockOfComputers.x;
+    
+    GroupMemoryBarrierWithGroupSync();
+
+}
+ 
+
+
+int _PositionScreenX_Pointer;
+int _PositionScreenY_Pointer;
+
+RWStructuredBuffer<float> bufferColorPointer;
+
+[numthreads(10,1,1)]
+void forPrintPointer(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+ 
+    float xAxis =   _PositionScreenX_Pointer + bufferPointerPositionX[(blockOfComputers.x * 10)  +  computer.x];
+    float yAxis =   _PositionScreenY_Pointer + bufferPointerPositionY[(blockOfComputers.x * 10)  +  computer.x];
+
+
+    float2 position = float2(xAxis, yAxis);
+
+    // uint colorArray = ( (blockOfComputers.x * 68) +   computer.x) * 4 ;
+
+    float r = bufferColorPointer[0] / 255;
+    float g = bufferColorPointer[1] / 255;
+    float b = bufferColorPointer[2] / 255;
+    float a = 1;
+
+
+    float4 color = float4(r, g, b, 1); 
+
+    // float4 color = float4(color0, color1, color2, 1); 
+    // float4 color = 1;    
+    
+    bufferImageColorWriteTextField[position.y * _WIDTH + position.x] = color;
+    
+    GroupMemoryBarrierWithGroupSync();
+
+}      
+
+
+
+int _PositionScreenX_PointerBlack;
+int _PositionScreenY_PointerBlack;
+
+[numthreads(10, 1, 1)]
+void forPrintPointerBlack(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+ 
+    float xAxis = _PositionScreenX_PointerBlack + bufferPointerPositionX[(blockOfComputers.x * 10)  +  computer.x];
+    float yAxis = _PositionScreenY_PointerBlack + bufferPointerPositionY[(blockOfComputers.x * 10)  +  computer.x];
+
+
+    float2 position = float2(xAxis, yAxis);
+
+    // uint colorArray = ( (blockOfComputers.x * 68) +   computer.x) * 4 ;
+
+    // float r = bufferTextureAlphabetColor_size22[colorArray ];
+    // float g = bufferTextureAlphabetColor_size22[colorArray + 1 ];
+    // float b = bufferTextureAlphabetColor_size22[colorArray + 2 ];
+    // float a = bufferTextureAlphabetColor_size22[colorArray + 3 ];
+
+    // float4 color = float4(r,g,b,a); 
+   
+    float4 color = 0;    
+    
+    bufferImageColorWriteTextField[position.y * _WIDTH + position.x] = color;
+    // bufferLargeMemory[position.y * _WIDTHlargeMemory + position.x] = color;
+
+    GroupMemoryBarrierWithGroupSync();
+}      
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+static int size = 7;
+
+
+[numthreads(40, 1, 1)]
+void forLoadHorizontalPosition(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+    
+    uint positionOverArray = blockOfComputers.x * 40 + computer.x;
+
+    bufferHorizontalPositionX[positionOverArray] = computer.x;
+    bufferHorizontalPositionY[positionOverArray] = blockOfComputers.x;
+    
+    GroupMemoryBarrierWithGroupSync();
+
+}
+
+
+
+
+[numthreads(size, 1, 1)]
+void forLoadVerticalPosition(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+    
+    uint positionOverArray = blockOfComputers.x * size + computer.x;
+
+    bufferVerticalPositionX[positionOverArray] = computer.x;
+    bufferVerticalPositionY[positionOverArray] = blockOfComputers.x;
+    
+    GroupMemoryBarrierWithGroupSync();
+
+}
+
+
+
+
+int _PositionScreenX_Horizontal;
+int _PositionScreenY_Horizontal;
+
+[numthreads(40, 1, 1)]
+void forPrintHorizontal(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+ 
+    float xAxis = _PositionScreenX_Horizontal + 2000 + bufferHorizontalPositionX[(blockOfComputers.x * 40)  +  computer.x];
+    float yAxis = _PositionScreenY_Horizontal + 1000 + bufferHorizontalPositionY[(blockOfComputers.x * 40)  +  computer.x];
+
+
+    float2 position = float2(xAxis, yAxis);
+
+    // uint colorArray = ( (blockOfComputers.x * 68) +   computer.x) * 4 ;
+
+    // float r = bufferTextureAlphabetColor_size22[colorArray ];
+    // float g = bufferTextureAlphabetColor_size22[colorArray + 1 ];
+    // float b = bufferTextureAlphabetColor_size22[colorArray + 2 ];
+    // float a = bufferTextureAlphabetColor_size22[colorArray + 3 ];
+
+    float4 color = float4(0.1843137254901961, 1.0, 0.9568627450980393, 1.0); 
+   
+    // float4 color = 1;    
+    
+    bufferLargeMemory[position.y * _WIDTHlargeMemory + position.x] = color;
+
+    GroupMemoryBarrierWithGroupSync();
+
+}      
+
+
+
+
+int _PositionScreenX_Vertical;
+int _PositionScreenY_Vertical;
+
+[numthreads(size, 1, 1)]
+void forPrintVertical(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+ 
+    float xAxis = _PositionScreenX_Vertical + 2000 + bufferVerticalPositionX[(blockOfComputers.x * size)  +  computer.x];
+    float yAxis = _PositionScreenY_Vertical + 1000 + bufferVerticalPositionY[(blockOfComputers.x * size)  +  computer.x];
+
+
+    float2 position = float2(xAxis, yAxis);
+
+    // uint colorArray = ( (blockOfComputers.x * 68) +   computer.x) * 4 ;
+
+    // float r = bufferTextureAlphabetColor_size22[colorArray ];
+    // float g = bufferTextureAlphabetColor_size22[colorArray + 1 ];
+    // float b = bufferTextureAlphabetColor_size22[colorArray + 2 ];
+    // float a = bufferTextureAlphabetColor_size22[colorArray + 3 ];
+
+    float4 color = float4(0.1843137254901961, 1.0, 0.9568627450980393, 1.0); 
+    // float4 color = 1;    
+    
+    bufferLargeMemory[position.y * _WIDTHlargeMemory + position.x] = color;
+
+    GroupMemoryBarrierWithGroupSync();
+
+}      
+
+
+
+
+int _PositionScreenX_HorizontalBlack;
+int _PositionScreenY_HorizontalBlack;
+
+[numthreads(40, 1, 1)]
+void forPrintHorizontalBlack(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+ 
+    float xAxis = _PositionScreenX_HorizontalBlack + 2000 + bufferHorizontalPositionX[(blockOfComputers.x * 40)  +  computer.x];
+    float yAxis = _PositionScreenY_HorizontalBlack + 1000 + bufferHorizontalPositionY[(blockOfComputers.x * 40)  +  computer.x];
+
+
+    float2 position = float2(xAxis, yAxis);
+
+    // uint colorArray = ( (blockOfComputers.x * 68) +   computer.x) * 4 ;
+
+    // float r = bufferTextureAlphabetColor_size22[colorArray ];
+    // float g = bufferTextureAlphabetColor_size22[colorArray + 1 ];
+    // float b = bufferTextureAlphabetColor_size22[colorArray + 2 ];
+    // float a = bufferTextureAlphabetColor_size22[colorArray + 3 ];
+
+    // float4 color = float4(r,g,b,a); 
+   
+    float4 color = 0;    
+    
+    bufferLargeMemory[position.y * _WIDTHlargeMemory + position.x] = color;
+
+    GroupMemoryBarrierWithGroupSync();
+
+}      
+
+
+
+
+int _PositionScreenX_VerticalBlack;
+int _PositionScreenY_VerticalBlack;
+
+[numthreads(size, 1, 1)]
+void forPrintVerticalBlack(uint3 blockOfComputers: SV_GroupID, uint3 computer: SV_GroupThreadID)
+{
+ 
+    float xAxis = _PositionScreenX_VerticalBlack + 2000 + bufferVerticalPositionX[(blockOfComputers.x * size)  +  computer.x];
+    float yAxis = _PositionScreenY_VerticalBlack + 1000 + bufferVerticalPositionY[(blockOfComputers.x * size)  +  computer.x];
+
+
+    float2 position = float2(xAxis, yAxis);
+
+    // uint colorArray = ( (blockOfComputers.x * 68) +   computer.x) * 4 ;
+
+    // float r = bufferTextureAlphabetColor_size22[colorArray ];
+    // float g = bufferTextureAlphabetColor_size22[colorArray + 1 ];
+    // float b = bufferTextureAlphabetColor_size22[colorArray + 2 ];
+    // float a = bufferTextureAlphabetColor_size22[colorArray + 3 ];
+
+    // float4 color = float4(r,g,b,a); 
+   
+    float4 color = 0;    
+    
+    bufferLargeMemory[position.y * _WIDTHlargeMemory + position.x] = color;
+
+    GroupMemoryBarrierWithGroupSync();
+
+}      
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
